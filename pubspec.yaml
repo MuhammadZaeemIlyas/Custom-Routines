@@ -40,7 +40,7 @@ dependencies:
   volume_control: ^0.1.5
   flutter_background_service: ^2.0.2
   wifi_iot: ^0.3.19+1
-
+  permission_handler: ^11.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

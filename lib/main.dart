@@ -19,13 +19,11 @@ Future<void> initializeService() async {
   // Configure the background service
   await service.configure(
     androidConfiguration: AndroidConfiguration(
-      // This will run the task in the background even after app is closed
       onStart: onStart,
       isForegroundMode: true,
       autoStart: true,
     ),
     iosConfiguration: IosConfiguration(
-      // iOS configuration (you can customize this)
       onForeground: onStart,
       autoStart: true,
     ),
@@ -39,7 +37,6 @@ Future<void> initializeService() async {
 void onStart(ServiceInstance service) {
   Timer.periodic(const Duration(minutes: 1), (timer) async {
     if (service is AndroidServiceInstance) {
-      // If the service is stopped by the user, stop the task
       if (await service.isForegroundService() == false) {
         timer.cancel();
         return;
@@ -55,15 +52,15 @@ void onStart(ServiceInstance service) {
     if (connectivityResult == ConnectivityResult.wifi) {
       String? currentSsid = await WiFiForIoTPlugin.getSSID();
       if (currentSsid == savedWifi) {
-        // Lower volume when connected to the saved Wi-Fi
-        VolumeControl.setVolume(0.2);
+        // Lower ringtone volume when connected to the saved Wi-Fi
+        await VolumeControl.setVolume(0.2); // Set to 20%
       } else {
-        // Restore volume when not connected to the saved Wi-Fi
-        VolumeControl.setVolume(1.0);
+        // Restore full ringtone volume when not connected to the saved Wi-Fi
+        await VolumeControl.setVolume(1.0); // Set to 100%
       }
     } else {
-      // Restore full volume when disconnected from Wi-Fi
-      VolumeControl.setVolume(1.0);
+      // Restore full ringtone volume when disconnected from Wi-Fi
+      await VolumeControl.setVolume(1.0); // Set to 100%
     }
   });
 }
